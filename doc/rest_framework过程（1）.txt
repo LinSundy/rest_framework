@@ -1,0 +1,23 @@
+特殊记忆：
+	1. from django.urls import re_path
+		re_path 是新版django的函数，第一个参数接受正则表达式
+
+
+cbv的执行过程:
+	1. 先执行ApiView的dispatch方法
+	   其中dispatch执行对应的方法时，使用的是反射，即getattr
+
+
+有些api必须要经过登录之后才能查看，那么就要基于认真来完成了
+
+
+1)安装django rest framework框架
+pip install djangorestframework
+
+
+2)创建一个app01
+django-admin startapp app01 或者
+python manage.py startapp app01
+
+3)windows 安装虚拟环境
+virtualenv env
