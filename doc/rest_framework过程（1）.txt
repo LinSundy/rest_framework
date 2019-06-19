@@ -21,3 +21,14 @@ python manage.py startapp app01
 
 3)windows 安装虚拟环境
 virtualenv env
+
+进入虚拟环境命令(需要在当前项目下)
+env\Scripts\activate
+
+虚拟环境下安装django
+pip install Django
+
+使用pip自动生成requirements.txt文件
+pip freeze>requirements.txt
+
+4)安装项目需要的插件
