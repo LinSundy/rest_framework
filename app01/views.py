@@ -2,7 +2,6 @@ from django.shortcuts import render, HttpResponse
 
 # Create your views here.
 from rest_framework.views import APIView
-from rest_framework.authentication import BasicAuthentication
 from rest_framework import exceptions
 
 
@@ -18,7 +17,7 @@ class MyAuthentication(object):
 
 
 class DogView(APIView):
-    authentication_classes = [MyAuthentication, ]
+    # authentication_classes = [MyAuthentication, ]
 
     def get(self, request, *args, **kwargs):
         return HttpResponse('获取狗!')
