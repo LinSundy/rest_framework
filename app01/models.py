@@ -14,6 +14,5 @@ class UserInfo(models.Model):
 
 
 class UserToken(models.Model):
-    # user = models.OneToOneField(to='UserInfo', on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(to='UserInfo', on_delete=models.DO_NOTHING)
     token = models.CharField(max_length=64)
-    userName = models.CharField(max_length=32)
