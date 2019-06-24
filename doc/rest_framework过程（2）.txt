@@ -6,4 +6,14 @@
 
 
 一、认证
-1. 有些api需要用户登录之后才可以访问，有些则不需要登录就可以访问
+1. 有些api需要用户登录之后才可以访问，有些则不需要登录就可以访问。
+
+python md5 加密
+1. 使用python hashlib库
+import hashlib库
+    hash = hashlib.md5()  #创建md5()加密实例
+    hash.update(bytes('admin', encoding='utf-8'))  #对admin字符进行加密
+    print(hash.hexdigest()) #返回产生的十六进制的bytes
+
+2. datetime 模块的使用
+获取当前时间 datetime.datetime.now()
