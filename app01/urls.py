@@ -1,7 +1,6 @@
-from django.urls import path,re_path
+from django.urls import re_path
 from . import views
 
-
 urlpatterns = [
-    re_path('^dog/', views.DogView.as_view())
+    re_path('^login/$', views.Login.as_view())
 ]

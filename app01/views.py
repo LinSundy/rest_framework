@@ -1,26 +1,26 @@
-from django.shortcuts import render, HttpResponse
+from django.http import JsonResponse
+from .models import UserInfo, UserToken
 
 # Create your views here.
 from rest_framework.views import APIView
-from rest_framework import exceptions
 
 
-class MyAuthentication(object):
-    def authenticate(self, request):
-        token = request._request.GET.get('token')
-        if not token:
-            raise exceptions.AuthenticationFailed('用户认证失败')
-        return ('alex', None)
-
-    def authenticate_header(self, val):
-        pass
-
-
-class DogView(APIView):
-    # authentication_classes = [MyAuthentication, ]
-
-    def get(self, request, *args, **kwargs):
-        return HttpResponse('获取狗!')
+class Login(APIView):
+    ret = {
+        'code': '0000',
+        'msg': '请求成功'
+    }
 
     def post(self, request, *args, **kwargs):
-        return HttpResponse('更新狗')
+        user = request._request.POST.get('username')
+        pwd = request._request.POST.get('password')
+        print(type(self.ret))
+        try:
+            user_obj = UserInfo.objects.get(username=user)
+            print(type(user_obj))
+            print(user_obj.password, '哇喔')
+            return JsonResponse(self.ret)
+        except UserInfo.DoesNotExist:
+            self.ret['code'] = '4000'
+            self.ret['msg'] = '当前用户名不存在！'
+            return JsonResponse(self.ret)
