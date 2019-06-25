@@ -16,6 +16,9 @@ def md5(s):
 
 
 class Login(APIView):
+    """
+    用于用户登录
+    """
 
     def post(self, request, *args, **kwargs):
         ret = {
@@ -42,6 +45,9 @@ class Login(APIView):
 
 
 class Register(APIView):
+    """
+    用户用户注册
+    """
 
     def post(self, request, *args, **kwargs):
         ret = {
