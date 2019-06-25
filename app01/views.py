@@ -32,6 +32,7 @@ class Login(APIView):
                 ret['token'] = token
                 ret['msg'] = '请求成功'
             else:
+                ret['code'] = '4000'
                 ret['msg'] = '用户名密码不正确'
             return JsonResponse(ret)
         except UserInfo.DoesNotExist:

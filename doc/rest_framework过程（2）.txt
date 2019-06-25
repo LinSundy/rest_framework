@@ -24,3 +24,10 @@ import hashlib库
  2. 密码错误的时候，会先修改msg然后再返回。
  出现的现象，有时候请求成功，也会返回用户用与密码错误的提示。原因是ret是dict，引用类型，当返回用户名密码不对的时候，实际
  已经修改了msg， 而当下次请求成功的时候，ret还是读取的原来内存中已经被修改msg之后的值，所以会出现此现象。
+
+
+ - 当删除已经存在的表，准备执行makemigrations操作时，提示no changed! 此时要执行3个步骤。
+ 1. 删除当前app应用下migrations/__pycache__ 文件夹下的文件
+ 2. 删除当前app下面目录migrations下面除了init.py其他的所有文件
+ 3. 最后，删除migrations中关于你的app的同步数据数据库记录
+ delete from django_migrations where app='yourappname';
