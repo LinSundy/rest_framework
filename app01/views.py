@@ -39,3 +39,28 @@ class Login(APIView):
             ret['code'] = '4000'
             ret['msg'] = '当前用户名不存在！'
             return JsonResponse(ret)
+
+
+class Register(APIView):
+
+    def post(self, request, *args, **kwargs):
+        ret = {
+            'code': '0000',
+            'msg': '请求成功'
+        }
+        username = request._request.POST.get('username')
+        password = request._request.POST.get('password')
+        userType = request._request.POST.get('userType')
+        if not username or not password:
+            ret['code'] = '4000'
+            ret['msg'] = '缺少必要参数'
+        else:
+            user_type = userType or 1
+            try:
+                usernameObj = UserInfo.objects.get(username=username)
+                ret['code'] = '4000'
+                ret['msg'] = '用户名重复'
+            except UserInfo.DoesNotExist:
+                UserInfo.objects.create(username=username, password=password, user_type=user_type)
+
+        return JsonResponse(ret)

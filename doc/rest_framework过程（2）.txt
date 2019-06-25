@@ -31,3 +31,6 @@ import hashlib库
  2. 删除当前app下面目录migrations下面除了init.py其他的所有文件
  3. 最后，删除migrations中关于你的app的同步数据数据库记录
  delete from django_migrations where app='yourappname';
+
+- bytes 转 字符串
+ str(str, 'utf-8')
