@@ -1,10 +1,26 @@
 from django.http import JsonResponse
 from .models import UserInfo, UserToken
+from rest_framework import exceptions
 import datetime
 import hashlib
 
 # Create your views here.
 from rest_framework.views import APIView
+
+# 简单定义一下order的数据
+orderData = {
+    'code': '0000',
+    'data': [
+        {
+            'yagao': {
+                'price': 3,
+            },
+            'yashua': {
+                'price': 2
+            }
+        }
+    ]
+}
 
 
 def md5(s):
@@ -13,6 +29,22 @@ def md5(s):
     current_time = datetime.datetime.now()
     m1.update(bytes(str(current_time), encoding='utf-8'))
     return m1.hexdigest()
+
+
+class Auth(object):
+    def authenticate(self, request):
+        ret = {
+            'code': '0000',
+            'msg': None
+        }
+        token = request.data.get('token');
+        token_obj = UserToken.objects.filter(token=token).first()
+        if not token_obj:
+            raise exceptions.AuthenticationFailed('用户认证失败！')
+        return (token_obj.user, token_obj)
+
+    def authenticate_header(self, request):
+        pass
 
 
 class Login(APIView):
@@ -70,3 +102,10 @@ class Register(APIView):
                 UserInfo.objects.create(username=username, password=password, user_type=user_type)
 
         return JsonResponse(ret)
+
+
+class Order(APIView):
+    authentication_classes = [Auth, ]
+
+    def get(self, request):
+        return JsonResponse(orderData)

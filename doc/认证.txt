@@ -1,0 +1,29 @@
+出现的原因？
+1. 有些api必须要经过登录之后才能查看，那么就要基于认证来完成了
+
+
+class Auth(object):
+    def authenticate(self, request):
+        ret = {
+            'code': '0000',
+            'msg': None
+        }
+        token = request.data.get('token');
+        token_obj = UserToken.objects.filter(token=token).first()
+        if not token_obj:
+            raise exceptions.AuthenticationFailed('用户认证失败！')
+        return (token_obj.user, token_obj)
+
+    def authenticate_header(self, request):
+        pass
+
+这个返回值有3种情况：
+ 1. 返回None， 表示验证通过，继续下一个验证，最终验证完是匿名用户
+ 2. 返回元组， 表示已经登录的用户
+ 3. 报异常，那么用户认证失败！
+
+
+问题？
+1. 认证时，如何给不同的提示信息？
+    - 不携带token信息时，提示用户认证失败
+    - 当同一个账号在别处登录时，应给出您的账号已经在别处登录。
