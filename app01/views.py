@@ -51,6 +51,7 @@ class Login(APIView):
     """
     用于用户登录
     """
+    authentication_classes = []
 
     def post(self, request, *args, **kwargs):
         ret = {
@@ -105,7 +106,6 @@ class Register(APIView):
 
 
 class Order(APIView):
-    authentication_classes = [Auth, ]
-
+    # authentication_classes = [Auth, ]
     def get(self, request):
         return JsonResponse(orderData)

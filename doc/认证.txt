@@ -1,7 +1,7 @@
 出现的原因？
 1. 有些api必须要经过登录之后才能查看，那么就要基于认证来完成了
 
-
+这种认证既可以在局部认证，也可以在全局认证。
 class Auth(object):
     def authenticate(self, request):
         ret = {
@@ -16,6 +16,9 @@ class Auth(object):
 
     def authenticate_header(self, request):
         pass
+
+当全局使用了认证，而比如登录，注册不需要认证的，那么只要将authentication_classes = [] 设置为空就可以了。
+
 
 这个返回值有3种情况：
  1. 返回None， 表示验证通过，继续下一个验证，最终验证完是匿名用户

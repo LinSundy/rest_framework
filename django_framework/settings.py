@@ -114,3 +114,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    # [] 里面写的是类的路径
+    'DEFAULT_AUTHENTICATION_CLASSES': []
+}
