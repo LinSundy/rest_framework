@@ -36,11 +36,7 @@ def md5(s):
 
 class Auth(BaseAuthentication):
     def authenticate(self, request):
-        ret = {
-            'code': '0000',
-            'msg': None
-        }
-        token = request.data.get('token');
+        token = request.data.get('token')
         token_obj = UserToken.objects.filter(token=token).first()
         if not token_obj:
             raise exceptions.AuthenticationFailed('用户认证失败！')
@@ -51,7 +47,6 @@ visit_record = {}
 
 
 class VisitThrottle(BaseThrottle):
-    MESSAGE = '一分钟之内只可以访问三次'
 
     def allow_request(self, request, view):
         remote_addr = request.META.get('REMOTE_ADDR')
@@ -60,9 +55,7 @@ class VisitThrottle(BaseThrottle):
             visit_record[remote_addr] = [ctime, ]
             return True
         record = visit_record.get(remote_addr)
-        print(record[-1], 333333)
         while record and record[-1] < ctime - 60:
-            print(4444)
             record.pop()
 
         if len(record) < 3:
@@ -121,7 +114,7 @@ class Register(APIView):
         else:
             user_type = userType or 1
             try:
-                usernameObj = UserInfo.objects.get(username=username)
+                UserInfo.objects.get(username=username)
                 ret['code'] = '4000'
                 ret['msg'] = '用户名重复'
             except UserInfo.DoesNotExist:

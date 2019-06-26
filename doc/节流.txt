@@ -28,6 +28,7 @@ class VisitThrottle(SimpleRateThrottle):
 
 配置文件：
 REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_CLASSES": [],
     "DEFAULT_THROTTLE_RATES": {
         "Luffy": '3/m'
     }
