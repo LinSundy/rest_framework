@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from .models import UserInfo, UserToken
 from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
 import datetime
 import hashlib
 
@@ -31,7 +32,7 @@ def md5(s):
     return m1.hexdigest()
 
 
-class Auth(object):
+class Auth(BaseAuthentication):
     def authenticate(self, request):
         ret = {
             'code': '0000',
@@ -42,10 +43,7 @@ class Auth(object):
         if not token_obj:
             raise exceptions.AuthenticationFailed('用户认证失败！')
         return (token_obj.user, token_obj)
-
-    def authenticate_header(self, request):
-        pass
-
+    
 
 class Login(APIView):
     """

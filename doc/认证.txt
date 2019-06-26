@@ -2,6 +2,7 @@
 1. 有些api必须要经过登录之后才能查看，那么就要基于认证来完成了
 
 这种认证既可以在局部认证，也可以在全局认证。
+
 class Auth(object):
     def authenticate(self, request):
         ret = {
@@ -30,3 +31,13 @@ class Auth(object):
 1. 认证时，如何给不同的提示信息？
     - 不携带token信息时，提示用户认证失败
     - 当同一个账号在别处登录时，应给出您的账号已经在别处登录。
+
+lambda表达式
+lambda :'匿名用户'
+
+内置的认证类
+from rest_framework.authentication import BaseAuthentication
+自己写认证类的时候，需要继承BaseAuthentication
+
+1. split('')  以空字符串分隔。
+2. partition(':')  已冒号分割，但是包含":"
