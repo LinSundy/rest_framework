@@ -1,0 +1,18 @@
+问题： 为不同的视图提供不同的访问权限!
+
+权限的基本使用:
+class MyPermission(object):
+    def has_permission(self, request, view):
+        if request.user.user_type == '3':
+            return true
+        return false
+
+源码流程：
+    与认证的流程基本是一样！ 存在全局使用与局部使用！
+
+内置权限：
+BasePermission 继承
+
+返回值：
+    - false 无权访问
+    - true 有权访问

@@ -1,0 +1,34 @@
+节流 与认证、权限也类似
+
+from rest_framework.throttling import BaseThrottle
+
+1. 获取ip地址
+ remote_addr = request.META.get('REMOTE_ADDR')
+
+time.time() 获取到秒
+1561533785.6060328
+
+datetime.datetime.now() 获取日期
+2019-06-26 07:23:05.606071
+
+django 有自己的缓存
+default_cache
+
+
+可以通过ip实现， 也可以通过用户名实现！
+
+内置的节流类
+
+SimpleRateThrottle
+class VisitThrottle(SimpleRateThrottle):
+    scope = "Luffy"
+
+    def get_cache_key(self, request, view):
+        return self.get_ident(request);
+
+配置文件：
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {
+        "Luffy": '3/m'
+    }
+}

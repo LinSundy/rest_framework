@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from .models import UserInfo, UserToken
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.throttling import BaseThrottle, SimpleRateThrottle
 import datetime
+import time
 import hashlib
 
 # Create your views here.
@@ -43,19 +45,44 @@ class Auth(BaseAuthentication):
         if not token_obj:
             raise exceptions.AuthenticationFailed('用户认证失败！')
         return (token_obj.user, token_obj)
-    
+
+
+visit_record = {}
+
+
+class VisitThrottle(BaseThrottle):
+    MESSAGE = '一分钟之内只可以访问三次'
+
+    def allow_request(self, request, view):
+        remote_addr = request.META.get('REMOTE_ADDR')
+        ctime = time.time()
+        if remote_addr not in visit_record:
+            visit_record[remote_addr] = [ctime, ]
+            return True
+        record = visit_record.get(remote_addr)
+        print(record[-1], 333333)
+        while record and record[-1] < ctime - 60:
+            print(4444)
+            record.pop()
+
+        if len(record) < 3:
+            record.insert(0, ctime)
+            return True
+
 
 class Login(APIView):
     """
     用于用户登录
     """
     authentication_classes = []
+    throttle_classes = [VisitThrottle, ]
 
     def post(self, request, *args, **kwargs):
         ret = {
             'code': '0000',
             'msg': None,
         }
+
         user = request._request.POST.get('username')
         pwd = request._request.POST.get('password')
         try:
