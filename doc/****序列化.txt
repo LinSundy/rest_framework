@@ -1,0 +1,20 @@
+当字段为：
+    choice = (
+        (1, '前端小组'),
+        (2, 'android小组'),
+        (3, 'java小组')
+    )
+    title = models.IntegerField(choices=choice)
+    此时，若要序列化，
+    class RoleSerializer(serializer.Serializer):
+        title = serializer.IntegerField() // 此时取的是数字
+
+当字段为ManyToMany的时候，需要使用到自定
+ rls = serializer.SerializerMethodField() # 自定义显示
+
+ def get_rls(self, row):
+    roles_obj = row.roles.all()
+    ret = []
+    for item in roles_obj:
+        ret.append({'id': item.id, 'title': item.title})
+    return ret

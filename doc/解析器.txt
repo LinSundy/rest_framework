@@ -1,0 +1,58 @@
+解析器
+ - django的request.body与request.POST
+    1. 请求头的要求:
+        如果Content-Type: application/x-www-form-urlencoded(去request.body中解析数据)
+    2. 数据格式有要求:
+        name=alex&age=18&gender=男
+        一般都是这种格式的！
+            a. 比如form表单提交的！
+                <form method="post">
+                    <input name='user' />
+                </form>
+
+            b.  ajax请求
+                $.ajax({
+                    url: 'demo',
+                    type: 'post',
+                    data: {
+                        name: alex,
+                        age: 18,
+                        gender: '男'
+                    }
+                })
+                ajax默认将data转化为name=alex&age=18&gender=男，并且默认头为application/x-www-form-urlencoded
+
+            c.  ajax还可以定义头
+                这种情况下，request.body里面有值, 而requestPOST里面没有值！
+                $.ajax({
+                    url: 'demo',
+                    type: 'post',
+                    headers: {'Content-Type': 'application/json'},
+                    data: {
+                        name: alex,
+                        age: 18,
+                        gender: '男'
+                    }
+                })
+
+            d.  ajax还可以定义头
+                这种情况不只是头不对，且传输的是字符串。此时还是request.body有值，request.POST无！
+                而后台解析的时候， json.loads(request.body)
+                $.ajax({
+                    url: 'demo',
+                    type: 'post',
+                    headers: {'Content-Type': 'application/json'},
+                    data: JSON.stringify({
+                        name: alex,
+                        age: 18,
+                        gender: '男'
+                    })
+                })
+
+    只有满足1和2，request.POST才有值!
+
+
+rest_framework 的解析器
+
+from rest_framework.parsers import JSONParser
+

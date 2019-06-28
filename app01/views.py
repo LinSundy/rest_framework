@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from .models import UserInfo, UserToken
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
@@ -6,7 +5,10 @@ from rest_framework.throttling import BaseThrottle, SimpleRateThrottle
 import datetime
 import time
 import hashlib
-
+from app01 import models
+from django.shortcuts import HttpResponse
+from django.http import JsonResponse
+import json
 # Create your views here.
 from rest_framework.views import APIView
 
@@ -71,11 +73,13 @@ class Login(APIView):
     throttle_classes = [VisitThrottle, ]
 
     def post(self, request, *args, **kwargs):
+        print(type(request.data), 111111)
+
         ret = {
             'code': '0000',
             'msg': None,
         }
-
+        return JsonResponse(ret)
         user = request._request.POST.get('username')
         pwd = request._request.POST.get('password')
         try:
@@ -127,3 +131,26 @@ class Order(APIView):
     # authentication_classes = [Auth, ]
     def get(self, request):
         return JsonResponse(orderData)
+
+
+from rest_framework import serializers
+
+
+class RolesSerializers(serializers.Serializer):
+    title = serializers.CharField()
+
+
+class Roles(APIView):
+    def get(self, request, *args, **kwargs):
+        roles = models.UserRoles.objects.all()
+
+        # 方式一：
+        # roles = list(roles)
+        # ret = json.dumps(roles, ensure_ascii=False)
+
+        # 方式二
+        ser = RolesSerializers(instance=roles, many=True)
+        # ser.data 已经是转换完成的结果了
+        print(ser.data)
+        # print(json.dumps(ser.data, ensure_ascii=False))
+        return HttpResponse(json.dumps(ser.data, ensure_ascii=False))
