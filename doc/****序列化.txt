@@ -1,3 +1,9 @@
+为什么要序列化？
+原因： 因为QuerySet要被序列化为Json
+
+一、继承serializer.Serializer
+
+字段的自定义：
 当字段为：
     choice = (
         (1, '前端小组'),
@@ -5,12 +11,21 @@
         (3, 'java小组')
     )
     title = models.IntegerField(choices=choice)
+
     此时，若要序列化，
     class RoleSerializer(serializer.Serializer):
         title = serializer.IntegerField() // 此时取的是数字
+        choiceNameNumber = serializer.IntegerField(source='title') // 此时取的也是数字
+        choiceName = serializer.CharField(source='get_title_display') // 此时显示的是中文
 
-当字段为ManyToMany的时候，需要使用到自定
+理解： 当字段是choice 或者 是ForeignKey时，用source都能解决显示问题。但是当用到的
+       字段为ManyToMany的时候，需要使用到自定serializer.SerializerMethodField()
+       这个方法。
+
  rls = serializer.SerializerMethodField() # 自定义显示
+
+
+@param row : 代表了当前行的对象
 
  def get_rls(self, row):
     roles_obj = row.roles.all()
@@ -18,3 +33,12 @@
     for item in roles_obj:
         ret.append({'id': item.id, 'title': item.title})
     return ret
+
+二、继承serializer.ModelSerializer
+
+class RolesSerializer(serializer.ModelSerializer):
+    class Meta:
+        model = models.UserRoles
+        fields = '__all__'
+
+        depth = 1 # 代表展开层级的深度，自动序列化连表

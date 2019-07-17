@@ -11,6 +11,7 @@ from django.http import JsonResponse
 import json
 # Create your views here.
 from rest_framework.views import APIView
+from rest_framework import serializers
 
 # 简单定义一下order的数据
 orderData = {
@@ -133,11 +134,14 @@ class Order(APIView):
         return JsonResponse(orderData)
 
 
-from rest_framework import serializers
-
-
 class RolesSerializers(serializers.Serializer):
     title = serializers.CharField()
+
+
+class RsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserRoles
+        fields = '__all__'
 
 
 class Roles(APIView):
@@ -149,7 +153,7 @@ class Roles(APIView):
         # ret = json.dumps(roles, ensure_ascii=False)
 
         # 方式二
-        ser = RolesSerializers(instance=roles, many=True)
+        ser = RsSerializers(instance=roles, many=True)
         # ser.data 已经是转换完成的结果了
         print(ser.data)
         # print(json.dumps(ser.data, ensure_ascii=False))
